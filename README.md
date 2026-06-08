@@ -15,14 +15,14 @@ A aplicação resolve problemas comuns de duplicidade na integração de diferen
 
 | Matrícula | Nome do Integrante |
 | :---: | :--- |
-| xxxxxxxxxxx | xxxxxxxxxxx |
-| xxxxxxxxxxx | xxxxxxxxxxx |
-| xxxxxxxxxxx | xxxxxxxxxxx |
+| João Pedro Costa | 190030801 |
+| Julia Gabriela Cunha Paulino | 221029230 |
+| Leonardo Sobrinho de Aguiar | 200022199 |
 
 ## Tecnologias Utilizadas
 
-* **Linguagem Orientada a Objetos:** ``
-* **Framework de Testes Unitários:** ``
+* **Linguagem Orientada a Objetos:** Python
+* **Framework de Testes Unitários:** Pytest
 
 O framework escolhido possui suporte completo aos recursos exigidos pela disciplina:
 - Suítes de testes
@@ -51,6 +51,14 @@ xxxxxxxxxxx
 xxxxxxxxxxx
 ```
 
+## Testes cobertos
+
+- Caso 1: Diferenças de grafia (tipográficas);
+- Caso 2: Sobrenome + Iniciais dos nomes;
+- Caso 3: Partículas de e uso de ponto nas abreviações opcionais;
+- Caso 4: Iniciais dos nomes agrupadas + sobrenome;
+- Caso 5: IDs diferentes para o mesmo autor.
+  
 ## Critérios
 
 * [ ] Aplicação desenvolvida em Linguagem Orientada a Objetos.
