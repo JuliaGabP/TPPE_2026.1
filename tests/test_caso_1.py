@@ -1,14 +1,18 @@
 import pytest
-from src.caso_1 import resolveCaso1Grafia
+from src.caso_1 import CuradorDeDados
 
-@pytest.mark.caso1
-def test_ResolverGrafiacomApostrofo():
-    variacoes = ["Monica Hirata Sant`anna", "Mônica Hirata Sant’anna"]
-    esperado = "Mônica Hirata Sant'anna"
-    assert resolveCaso1Grafia(variacoes) == esperado
+class TestCaso1:
+    def setup_method(self):
+        self.curador = CuradorDeDados()
 
-@pytest.mark.caso1
-def test_ResolverGrafiacomAcento():
-    variacoes = ["Sergio Henrique Guaraldi", "Sérgio Henrique Guaraldi"]
-    esperado = "Sérgio Henrique Guaraldi"
-    assert resolveCaso1Grafia(variacoes) == esperado 
+    @pytest.mark.caso1
+    @pytest.mark.parametrize("variacoes, esperado", [
+        (["Monica Hirata Sant`anna", "Mônica Hirata Sant’anna"], "Mônica Hirata Sant'anna"),
+        (["Sergio Henrique Guaraldi", "Sérgio Henrique Guaraldi"], "Sérgio Henrique Guaraldi")])
+    def test_ResolverGrafia(self, variacoes, esperado):
+        assert self.curador.resolveCaso1Grafia(variacoes) == esperado
+
+    @pytest.mark.caso1
+    def test_ExcecaoListaVazia(self):
+        with pytest.raises(ValueError, match="A lista de nomes não pode estar vazia."):
+            self.curador.resolveCaso1Grafia([])
