@@ -1,12 +1,10 @@
 from src.registro_autor import RegistroAutor
-from src.caso_2 import Caso2
-from src.caso_4 import Caso4
+from src.curador_dados import CuradorDeDados
 
 
 class DeduplicadorNomes:
     def __init__(self):
-        self.caso2 = Caso2()
-        self.caso4 = Caso4()
+        self.curador = CuradorDeDados()
 
     def deduplicar_caso2(
         self,
@@ -19,7 +17,7 @@ class DeduplicadorNomes:
                 if registro_completo == registro_candidato:
                     continue
 
-                if self.caso2.corresponde(
+                if self.curador.corresponde_caso2(
                     registro_completo.nome,
                     registro_candidato.nome
                 ):
@@ -41,7 +39,7 @@ class DeduplicadorNomes:
                 if registro_completo == registro_candidato:
                     continue
 
-                if self.caso4.corresponde(
+                if self.curador.corresponde_caso4(
                     registro_completo.nome,
                     registro_candidato.nome
                 ):

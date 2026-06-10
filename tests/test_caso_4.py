@@ -1,7 +1,7 @@
 import pytest
 
 from src.registro_autor import RegistroAutor
-from src.caso_4 import Caso4, AutorInvalido
+from src.curador_dados import CuradorDeDados, AutorInvalido
 from src.deduplicador import DeduplicadorNomes
 
 
@@ -12,15 +12,16 @@ from src.deduplicador import DeduplicadorNomes
         ("Vanilda Cristina Junior", "VC Junior"),
         ("Sérgio Henrique Guaraldi", "SH Guaraldi"),
         ("Ana Mattos Seabra", "AM Seabra"),
+        ("Ana de Mattos Seabra", "AM Seabra"),
     ],
 )
 def test_caso4_corresponde_iniciais_agrupadas_mais_sobrenome(
     nome_completo,
     nome_abreviado
 ):
-    caso4 = Caso4()
+    caso4 = CuradorDeDados()
 
-    assert caso4.corresponde(nome_completo, nome_abreviado)
+    assert caso4.corresponde_caso4(nome_completo, nome_abreviado)
 
 
 @pytest.mark.caso_4
@@ -36,9 +37,9 @@ def test_caso4_nao_corresponde_autores_diferentes(
     nome_completo,
     nome_abreviado
 ):
-    caso4 = Caso4()
+    caso4 = CuradorDeDados()
 
-    assert not caso4.corresponde(nome_completo, nome_abreviado)
+    assert not caso4.corresponde_caso4(nome_completo, nome_abreviado)
 
 
 @pytest.mark.caso_4
@@ -77,15 +78,15 @@ def test_caso4_deduplica_sergio_henrique_guaraldi():
 
 @pytest.mark.caso_4
 def test_caso4_lanca_excecao_quando_nome_completo_vazio():
-    caso4 = Caso4()
+    caso4 = CuradorDeDados()
 
     with pytest.raises(AutorInvalido):
-        caso4.corresponde("", "VC Junior")
+        caso4.corresponde_caso4("", "VC Junior")
 
 
 @pytest.mark.caso_4
 def test_caso4_lanca_excecao_quando_nome_abreviado_vazio():
-    caso4 = Caso4()
+    caso4 = CuradorDeDados()
 
     with pytest.raises(AutorInvalido):
-        caso4.corresponde("Vanilda Cristina Junior", "")
+        caso4.corresponde_caso4("Vanilda Cristina Junior", "")
