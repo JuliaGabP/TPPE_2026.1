@@ -1,5 +1,5 @@
 import pytest
-from src.caso_1 import CuradorDeDados
+from src.curador_dados import CuradorDeDados
 
 class TestCaso1:
     def setup_method(self):
@@ -8,7 +8,8 @@ class TestCaso1:
     @pytest.mark.caso_1
     @pytest.mark.parametrize("variacoes, esperado", [
         (["Monica Hirata Sant`anna", "Mônica Hirata Sant’anna"], "Mônica Hirata Sant'anna"),
-        (["Sergio Henrique Guaraldi", "Sérgio Henrique Guaraldi"], "Sérgio Henrique Guaraldi")])
+        (["Sergio Henrique Guaraldi", "Sérgio Henrique Guaraldi"], "Sérgio Henrique Guaraldi"),
+        (["Veronica de Oliveira Moreira", "Verônica de Oliveira Moreira"], "Verônica de Oliveira Moreira")])
     def test_ResolverGrafia(self, variacoes, esperado):
         assert self.curador.resolveCaso1Grafia(variacoes) == esperado
 

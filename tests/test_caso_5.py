@@ -1,9 +1,9 @@
 import pytest
-from src.caso_5 import Caso5
+from src.curador_dados import CuradorDeDados
 
 class TestCaso5:
     def setup_method(self):
-        self.curador = Caso5()
+        self.curador = CuradorDeDados()
 
     @pytest.mark.caso_5
     @pytest.mark.parametrize("dados_entrada, esperado", [

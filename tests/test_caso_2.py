@@ -1,7 +1,7 @@
 import pytest
 
 from src.registro_autor import RegistroAutor
-from src.caso_2 import Caso2, AutorInvalido
+from src.curador_dados import CuradorDeDados, AutorInvalido
 from src.deduplicador import DeduplicadorNomes
 
 
@@ -11,20 +11,25 @@ from src.deduplicador import DeduplicadorNomes
     [
         ("Ana de Mattos Seabra", "Seabra A. M."),
         ("Ana de Mattos Seabra", "Seabra A M"),
+        ("Ana de Mattos Seabra", "A. M. Seabra"),
         ("Cassius de Souza", "Souza C."),
+        ("Cassius de Souza", "C. Souza"),
+        ("Cassius de Souza", "Souza, Cassius de"),
         ("Verônica de Oliveira Moreira", "Moreira V O"),
         ("Verônica de Oliveira Moreira", "Moreira V. de O."),
         ("Luiz de Oliveira de Souza", "Souza L. O."),
+        ("Luiz de Oliveira de Souza", "Souza, L. O."),
         ("Mônica Hirata Sant'anna", "Sant'anna M. H."),
+        ("Mônica Hirata Sant'anna", "M. H. Sant'anna"),
     ],
 )
 def test_caso2_corresponde_sobrenome_mais_iniciais(
     nome_completo,
     nome_abreviado
 ):
-    caso2 = Caso2()
+    caso2 = CuradorDeDados()
 
-    assert caso2.corresponde(nome_completo, nome_abreviado)
+    assert caso2.corresponde_caso2(nome_completo, nome_abreviado)
 
 
 @pytest.mark.caso_2
@@ -41,9 +46,9 @@ def test_caso2_nao_corresponde_autores_diferentes(
     nome_completo,
     nome_abreviado
 ):
-    caso2 = Caso2()
+    caso2 = CuradorDeDados()
 
-    assert not caso2.corresponde(nome_completo, nome_abreviado)
+    assert not caso2.corresponde_caso2(nome_completo, nome_abreviado)
 
 
 @pytest.mark.caso_2
@@ -82,15 +87,15 @@ def test_caso2_deduplica_cassius_de_souza():
 
 @pytest.mark.caso_2
 def test_caso2_lanca_excecao_quando_nome_completo_vazio():
-    caso2 = Caso2()
+    caso2 = CuradorDeDados()
 
     with pytest.raises(AutorInvalido):
-        caso2.corresponde("", "Seabra A. M.")
+        caso2.corresponde_caso2("", "Seabra A. M.")
 
 
 @pytest.mark.caso_2
 def test_caso2_lanca_excecao_quando_nome_abreviado_vazio():
-    caso2 = Caso2()
+    caso2 = CuradorDeDados()
 
     with pytest.raises(AutorInvalido):
-        caso2.corresponde("Ana de Mattos Seabra", "")
+        caso2.corresponde_caso2("Ana de Mattos Seabra", "")

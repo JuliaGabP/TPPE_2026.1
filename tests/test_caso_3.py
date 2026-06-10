@@ -1,14 +1,15 @@
 import pytest
-from src.caso_3 import CuradorCaso3
+from src.curador_dados import CuradorDeDados
 
 class TestCaso3:
     def setup_method(self):
-        self.curador = CuradorCaso3()
+        self.curador = CuradorDeDados()
 
     @pytest.mark.caso_3
     @pytest.mark.parametrize("variacoes, esperado", [
         (["Luiz Oliveira Souza", "Luiz de Oliveira de Souza", "Luiz de O. de Souza"], "Luiz de Oliveira de Souza"),
-        (["Ana de Mattos Seabra", "Ana Mattos Seabra"], "Ana de Mattos Seabra")])
+        (["Ana de Mattos Seabra", "Ana Mattos Seabra"], "Ana de Mattos Seabra"),
+        (["Verônica de Oliveira Moreira", "V. de O. Moreira", "Moreira V. de O.", "Moreira V O"], "Verônica de Oliveira Moreira")])
     def test_resolver_particulas_e_pontos(self, variacoes, esperado):
         assert self.curador.resolver_caso3(variacoes) == esperado
 
