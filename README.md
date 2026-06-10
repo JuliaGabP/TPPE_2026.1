@@ -19,6 +19,10 @@ A aplicação resolve problemas comuns de duplicidade na integração de diferen
 | Julia Gabriela Cunha Paulino | 221029230 |
 | Leonardo Sobrinho de Aguiar | 200022199 |
 
+## Metodologia
+
+Como foi solicitado adotar a metodologia de Test-Driven Development (TDD), a nossa dinâmica de desenvolvimento seguiu um fluxo reverso ao tradicional: antes de escrevermos a lógica principal de qualquer um dos cinco problemas, nós elaboramos primeiro os testes. O objetivo era mapear rigorosamente todas as condições, entradas e saídas esperadas para cada problema, assim como foi visto em sala de aula. Apenas após a criação desses testes, iniciamos a etapa de elaboração dos programas em si. Desenvolvemos o código de cada aplicação de forma direcionada, com o propósito de satisfazer as condições estabelecidas e fazer com que todos os testes elaborados anteriormente passassem com sucesso. Essa abordagem garantiu que os desafios propostos fossem cumpridos sem maiores dificuldades.
+
 ## Tecnologias Utilizadas
 
 * **Linguagem Orientada a Objetos:** Python
