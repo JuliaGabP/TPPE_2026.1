@@ -34,21 +34,28 @@ O framework escolhido possui suporte completo aos recursos exigidos pela discipl
 
 Siga os passos abaixo para clonar o repositório e executar a suíte de testes:
 
-**1. Clone o repositório:**
+**1. Na pasta escolhida clone o repositório:**
+
 ```bash
-xxxxxxxxxxx
+git clone https://github.com/JuliaGabP/TPPE_2026.1.git
 ```
 
 **2. Instale as dependências:**
 
 ```bash
-xxxxxxxxxxx
+pip install pytest
 ```
 
-**3. Execute os testes:**
+**3. Execute os testes**
+### na pasta "tests" por caso, onde X é o numero do "caso_X":
 
 ```bash
-xxxxxxxxxxx
+pytest test_caso_X.py -v
+```
+### na pasta "TPPE_2026.1" todos de uma vez:
+
+```bash
+pytest tests/ -v
 ```
 
 ## Testes cobertos
