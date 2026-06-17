@@ -6,19 +6,61 @@ class AutorInvalido(ValueError):
     pass
 
 
-class CuradorDeDados:
+#classe NormalizadorNomes foi extraida de CuradorDeDados.
+#separei as responsabilidades, o CuradorDeDados tava com mt coisa e logica
+class NormalizadorNomes:
     CONEXOES = {"DE", "DA", "DO", "DAS", "DOS"}
 
-    def corresponde_caso2(self, nome_completo: str, nome_abreviado: str) -> bool:
-        self._validar_nomes(nome_completo, nome_abreviado)
+    def validar_nomes(self, nome_completo: str, nome_abreviado: str) -> None:
+        if not nome_completo or not nome_abreviado:
+            raise AutorInvalido("Nome do autor não pode ser vazio.")
 
-        tokens_nome_completo = self._normalizar_tokens(nome_completo)
-        tokens_nome_abreviado = self._normalizar_tokens(nome_abreviado)
+    def normalizar_tokens(self, nome: str) -> list[str]:
+        nome = nome.strip().upper()
+        nome = self.remover_acentos(nome)
+        nome = nome.replace(",", " ")
+        nome = nome.replace(".", " ")
+        nome = nome.replace("`", "'")
+        nome = nome.replace("’", "'")
+
+        tokens = re.split(r"\s+", nome)
+        return [token for token in tokens if token]
+
+    def remover_acentos(self, texto: str) -> str:
+        texto_normalizado = unicodedata.normalize("NFD", texto)
+
+        return "".join(
+            caractere
+            for caractere in texto_normalizado
+            if unicodedata.category(caractere) != "Mn"
+        )
+
+    def obter_sobrenome(self, tokens: list[str]) -> str:
+        return tokens[-1]
+
+    def extrair_iniciais(self, tokens: list[str]) -> list[str]:
+        return [
+            token[0]
+            for token in tokens
+            if token not in self.CONEXOES
+        ]
+
+
+class CuradorDeDados:
+    def __init__(self):
+        #CuradorDeDados usa a técnica de Composição
+        self.normalizador = NormalizadorNomes()
+
+    def corresponde_caso2(self, nome_completo: str, nome_abreviado: str) -> bool:
+        self.normalizador.validar_nomes(nome_completo, nome_abreviado)
+
+        tokens_nome_completo = self.normalizador.normalizar_tokens(nome_completo)
+        tokens_nome_abreviado = self.normalizador.normalizar_tokens(nome_abreviado)
 
         if self._nomes_invalidos_para_caso2(tokens_nome_completo, tokens_nome_abreviado):
             return False
 
-        sobrenome_completo = self._obter_sobrenome(tokens_nome_completo)
+        sobrenome_completo = self.normalizador.obter_sobrenome(tokens_nome_completo)
         iniciais_abreviado = self._obter_iniciais_abreviadas_caso2(
             tokens_nome_abreviado,
             sobrenome_completo
@@ -34,10 +76,10 @@ class CuradorDeDados:
         return iniciais_completo == iniciais_abreviado
 
     def corresponde_caso4(self, nome_completo: str, nome_abreviado: str) -> bool:
-        self._validar_nomes(nome_completo, nome_abreviado)
+        self.normalizador.validar_nomes(nome_completo, nome_abreviado)
 
-        tokens_nome_completo = self._normalizar_tokens(nome_completo)
-        tokens_nome_abreviado = self._normalizar_tokens(nome_abreviado)
+        tokens_nome_completo = self.normalizador.normalizar_tokens(nome_completo)
+        tokens_nome_abreviado = self.normalizador.normalizar_tokens(nome_abreviado)
 
         if len(tokens_nome_completo) < 2 or len(tokens_nome_abreviado) != 2:
             return False
@@ -45,7 +87,7 @@ class CuradorDeDados:
         iniciais_agrupadas = tokens_nome_abreviado[0]
         sobrenome_abreviado = tokens_nome_abreviado[1]
 
-        sobrenome_completo = self._obter_sobrenome(tokens_nome_completo)
+        sobrenome_completo = self.normalizador.obter_sobrenome(tokens_nome_completo)
         iniciais_nome_completo = self._extrair_iniciais_agrupadas_caso4(
             tokens_nome_completo
         )
@@ -65,7 +107,7 @@ class CuradorDeDados:
         ]
 
         for nome in nomes_corrigidos:
-            if nome != self._remover_acentos(nome):
+            if nome != self.normalizador.remover_acentos(nome):
                 return nome
 
         return nomes_corrigidos[-1]
@@ -94,19 +136,12 @@ class CuradorDeDados:
 
         return autores
 
-    def _validar_nomes(self, nome_completo: str, nome_abreviado: str) -> None:
-        if not nome_completo or not nome_abreviado:
-            raise AutorInvalido("Nome do autor não pode ser vazio.")
-
     def _nomes_invalidos_para_caso2(
         self,
         tokens_nome_completo: list[str],
         tokens_nome_abreviado: list[str]
     ) -> bool:
         return len(tokens_nome_completo) < 2 or len(tokens_nome_abreviado) < 2
-
-    def _obter_sobrenome(self, tokens: list[str]) -> str:
-        return tokens[-1]
 
     def _obter_iniciais_abreviadas_caso2(
         self,
@@ -120,18 +155,11 @@ class CuradorDeDados:
         else:
             return None
 
-        return self._extrair_iniciais(tokens_iniciais)
+        return self.normalizador.extrair_iniciais(tokens_iniciais)
 
     def _extrair_iniciais_nome_completo(self, tokens: list[str]) -> list[str]:
         nome_sem_sobrenome = tokens[:-1]
-        return self._extrair_iniciais(nome_sem_sobrenome)
-
-    def _extrair_iniciais(self, tokens: list[str]) -> list[str]:
-        return [
-            token[0]
-            for token in tokens
-            if token not in self.CONEXOES
-        ]
+        return self.normalizador.extrair_iniciais(nome_sem_sobrenome)
 
     def _extrair_iniciais_agrupadas_caso4(self, tokens: list[str]) -> str:
         nome_sem_ultimo_sobrenome = tokens[:-1]
@@ -139,7 +167,8 @@ class CuradorDeDados:
         return "".join(
             token[0]
             for token in nome_sem_ultimo_sobrenome
-            if token not in self.CONEXOES
+            #constante CONEXOES movida para a nova classe.
+            if token not in self.normalizador.CONEXOES
         )
 
     def _calcular_completude_caso3(self, nome: str) -> int:
@@ -156,23 +185,3 @@ class CuradorDeDados:
                 pontuacao += 5
 
         return pontuacao
-
-    def _normalizar_tokens(self, nome: str) -> list[str]:
-        nome = nome.strip().upper()
-        nome = self._remover_acentos(nome)
-        nome = nome.replace(",", " ")
-        nome = nome.replace(".", " ")
-        nome = nome.replace("`", "'")
-        nome = nome.replace("’", "'")
-
-        tokens = re.split(r"\s+", nome)
-        return [token for token in tokens if token]
-
-    def _remover_acentos(self, texto: str) -> str:
-        texto_normalizado = unicodedata.normalize("NFD", texto)
-
-        return "".join(
-            caractere
-            for caractere in texto_normalizado
-            if unicodedata.category(caractere) != "Mn"
-        )
