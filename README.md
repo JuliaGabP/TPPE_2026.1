@@ -1,4 +1,4 @@
-# TPPE_2026.1 - Trabalho Prático 1 - Curadoria de Dados
+# TPPE_2026.1 - Trabalhos Práticos 1 e 2 - Curadoria de Dados e Refatoração
 
 ## Sobre o Projeto
 
@@ -30,13 +30,21 @@ A partir disso, aplicamos as operações de refatoração. Conforme avançamos p
 ## Tecnologias Utilizadas
 
 * **Linguagem Orientada a Objetos:** Python
-* **Framework de Testes Unitários:** Pytest
+* **Framework de Testes Unitários:** Pytest (versão 7.4.4)
 
 O framework escolhido possui suporte completo aos recursos exigidos pela disciplina:
 - Suítes de testes
 - Categorias de testes
 - Testes parametrizados
 - Testes de exceção
+
+## Refatoração (Trabalho Prático 2)
+
+Dando continuidade ao projeto, na Etapa 2 aplicamos técnicas de refatoração para melhorar a estrutura e legibilidade do código, garantindo que os testes continuem passando (barra verde). Como integrantes do **Grupo 2**, realizamos as seguintes operações exigidas:
+
+* **Extrair Método:** Extraímos partes da lógica do método `CuradorDeDados::corresponde_caso2()` para novos métodos privados (`_nomes_invalidos_para_caso2`, `_obter_iniciais_abreviadas_caso2`, `_extrair_iniciais_nome_completo`), aumentando a coesão.
+* **Substituir Método por Objeto Método:** A lógica complexa do método `DeduplicadorNomes::deduplicar_caso4()` foi substituída pela instanciação e execução da nova classe `DeduplicacaoCaso4`.
+* **Extrair Classe:** A lógica de manipulação e padronização de strings foi extraída da classe `CuradorDeDados` para a nova classe `NormalizadorNomes`.
 
 ## Como executar os testes
 
